@@ -1,0 +1,4 @@
+uart_communication_fsm.c:29:6:normal_mode	8	static
+uart_communication_fsm.c:34:6:clearBuffer	16	static
+uart_communication_fsm.c:42:6:command_parser_fsm	8	static
+uart_communication_fsm.c:67:6:uart_communication_fsm	8	static
