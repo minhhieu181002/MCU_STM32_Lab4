@@ -74,11 +74,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 		switch (temp) {
 			case ' ':
 				break;
-			case '\b': // backspace
+			case '\b':
 				buffer[index_buffer - 1] = 0;
 				index_buffer--;
 				break;
-			case '\r': // enter, process data now
+			case '\r':
 				buffer_flag = 1;
 				break;
 			default:
