@@ -69,8 +69,8 @@ static void MX_TIM2_Init(void);
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(huart->Instance == USART2){
-		HAL_UART_Receive_IT(&huart2, &temp, 1);
 		HAL_UART_Transmit(&huart2,&temp,1,50);
+		HAL_UART_Receive_IT(&huart2, &temp, 1);
 		switch (temp) {
 			case ' ':
 				break;
@@ -78,13 +78,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 				buffer[index_buffer - 1] = 0;
 				index_buffer--;
 				break;
-			case '\r':
-				buffer_flag = 1;
-				break;
 			default:
 				buffer[index_buffer++] = temp;
+				buffer_flag = 1;
 				break;
 		}
+
 
   }
 }
@@ -137,6 +136,8 @@ int main(void)
   setTimer2(10);
   setTimer3(10);
   setTimer4(10);
+  command_state = IDLE;
+  status_UART = COMMAND_WATING;
   while (1)
   {
     /* USER CODE END WHILE */
@@ -144,17 +145,12 @@ int main(void)
 		  HAL_GPIO_TogglePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin);
 		  setTimer1(100);
 	  }
-	  if(timer2_flag == 1) {
-		  if(buffer_flag == 1) {
-		  		  command_parser_fsm ();
-		  		  buffer_flag =0;
-		  	  }
-		  setTimer2(50);
-	  }
-	  if(timer3_flag == 1){
-		  uart_communication_fsm();
-		  setTimer3(50);
-	  }
+	if(buffer_flag == 1) {
+		  command_parser_fsm ();
+		  buffer_flag =0;
+	}
+	uart_communication_fsm();
+
 
     /* USER CODE BEGIN 3 */
   }
